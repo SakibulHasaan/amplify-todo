@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sakibpractice-dev-164143-authRole",
+      "UnauthRoleArn": "arn:aws:iam::023630222055:role/amplify-sakibpractice-dev-164143-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::023630222055:role/amplify-sakibpractice-dev-164143-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-sakibpractice-dev-164143-deployment",
+      "UnauthRoleName": "amplify-sakibpractice-dev-164143-unauthRole",
+      "StackName": "amplify-sakibpractice-dev-164143",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:023630222055:stack/amplify-sakibpractice-dev-164143/b86072f0-88cb-11ec-80a0-0a644e1fc79c",
+      "AmplifyAppId": "d1ajlz4fk6eudw"
+    }
+  }
+}
