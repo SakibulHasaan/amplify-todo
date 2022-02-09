@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Amplify, { API, graphqlOperation } from 'aws-amplify'
+import Amplify, { API, graphqlOperation, Auth  } from 'aws-amplify'
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import awsExports from './aws-exports'
 import { v4 as uuid } from 'uuid'
 import './App.css'
-import awsExports from './aws-exports'
 import { listTodos } from './graphql/queries'
 import { createTodo, deleteTodo, updateTodo } from './graphql/mutations'
 
@@ -13,7 +15,7 @@ const initialFormState = { name: '', description: '' }
 const App = () => {
   const [ form, setForm ] = useState( initialFormState )
   const [ todos, setTodos ] = useState( [] )
-  const [ update, setUpdate ] = useState( initialFormState );
+  const [ updatableTodo, setUpdatableTodo ] = useState( initialFormState );
 
   useEffect( () => {
     fetchTodos()
@@ -25,11 +27,11 @@ const App = () => {
   }
 
   const handleChange = ( event ) => {
-    if ( !update.id ) {
+    if ( !updatableTodo.id ) {
       setForm( { ...form, [ event.target.name ]: event.target.value } )
     }
     else {
-      setUpdate( { ...update, [ event.target.name ]: event.target.value } )
+      setUpdatableTodo( { ...updatableTodo, [ event.target.name ]: event.target.value } )
     }
   }
 
@@ -62,13 +64,13 @@ const App = () => {
 
   const updateTodoByID = async () => {
     try {
-      if ( update.description && update.name ) {
+      if ( updatableTodo.description && updatableTodo.name ) {
         const todo = {
-          id: update.id,
-          name: update.name,
-          description: update.description
+          id: updatableTodo.id,
+          name: updatableTodo.name,
+          description: updatableTodo.description
         }
-        setUpdate( initialFormState );
+        setUpdatableTodo( initialFormState );
         await API.graphql( graphqlOperation( updateTodo, { input: todo } ) )
         fetchTodos()
       }
@@ -76,8 +78,6 @@ const App = () => {
       console.log( err )
     }
   }
-
-  console.log(update);
 
   return (
     <div className='main'>
@@ -114,33 +114,33 @@ const App = () => {
       </div>
       <div className='container'>
         <div className='todos'>
-          {todos.map( ( item: todo, index: number ) => {
+          {todos.map( ( item, index ) => {
             return (
-              <div className='todo' key={index}>
+              <div className='todo' key={item.id}>
                 <button onClick={() => deleteTodoByID( item.id )}>Delete</button>
                 {
-                  update.id ? <button className="update" onClick={updateTodoByID}>Save</button> :
-                  <button className="update" onClick={() => setUpdate( item )}>Update</button>
+                  updatableTodo.id ? <button className="update" onClick={updateTodoByID}>Save</button> :
+                  <button className="update" onClick={() => setUpdatableTodo( item )}>Update</button>
                 }
 
                 {
-                  update.id ? 
+                  updatableTodo.id === item.id ? 
                   <input
                     style={{marginTop: "10px"}}
                     onChange={( event ) => handleChange( event )}
-                    value={update.name}
+                    value={updatableTodo.name}
                     name='name'
-                    className='form-input'
-                  /> : <h4>TITLE: {item.name}</h4>
+                    
+                  /> : <h4>Title: {item.name}</h4>
                 }
 
                 {
-                  update.id ?
+                  updatableTodo.id === item.id ?
                     <input style={{marginTop: "10px"}}
                       onChange={( event ) => handleChange( event )}
-                      value={update.description}
+                      value={updatableTodo.description}
                       name='description'
-                      className='form-input form-desc'
+                      
                     />
                     : <p>DESCRIPTION: {item.description}</p>
                 }
@@ -153,4 +153,4 @@ const App = () => {
   )
 }
 
-export default App
+export default withAuthenticator(App);

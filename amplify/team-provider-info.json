@@ -10,6 +10,11 @@
       "StackName": "amplify-sakibpractice-dev-164143",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:023630222055:stack/amplify-sakibpractice-dev-164143/b86072f0-88cb-11ec-80a0-0a644e1fc79c",
       "AmplifyAppId": "d1ajlz4fk6eudw"
+    },
+    "categories": {
+      "auth": {
+        "sakibpractice2aaa0cd3": {}
+      }
     }
   }
 }
